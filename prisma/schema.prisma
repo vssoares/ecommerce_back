@@ -56,8 +56,8 @@ model ProdutosOnCarrinho {
   carrinho_id Int 
   produto       Produto     @relation(fields: [produto_id], references: [id])
   produto_id     Int
-  assignedAt DateTime @default(now())
-  assignedBy String
+  created_at DateTime @default(now())
+  updated_at String
 
   @@id([carrinho_id, produto_id])
 }
