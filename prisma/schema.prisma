@@ -15,30 +15,49 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model User {
+model Usuario {
   id    Int     @default(autoincrement()) @id
-  name  String?
+  name  String
   email String  @unique 
   password String  
-  reactions Reaction[]
-  posts Post[]
+  enderecos Endereco[]
+  carrinho Carrinho?
 }
 
-model Post {
-  id        Int      @default(autoincrement()) @id
-  title     String
-  content   String?
-  author    User?    @relation(fields: [author_id], references: [id])
-  author_id  Int?
-  reactions Reaction[]
-  created_at  DateTime @default(now())
+model Endereco {
+  id       Int  @id @default(autoincrement())
+  cep String
+  rua String
+  numero String
+  complemento String
+  bairro String
+  cidade String
+  uf String
+  pais String
+  user   Usuario @relation(fields: [usuario_id], references: [id])
+  usuario_id Int
 }
 
-model Reaction {
-  id        Int      @default(autoincrement()) @id
-  type String?
-  post    Post?    @relation(fields: [post_id], references: [id])
-  post_id  Int?
-  user    User?    @relation(fields: [user_id], references: [id])
-  user_id  Int?
+
+model Carrinho {
+  id       Int  @id @default(autoincrement())
+  produtos ProdutosOnCarrinho[]
+  user   Usuario @relation(fields: [usuario_id], references: [id])
+  usuario_id Int @unique 
+}
+
+model Produto {
+  id       Int  @id @default(autoincrement())
+  carrinhos ProdutosOnCarrinho[]
+}
+
+model ProdutosOnCarrinho {
+  carrinho   Carrinho @relation(fields: [carrinho_id], references: [id])
+  carrinho_id Int 
+  produto       Produto     @relation(fields: [produto_id], references: [id])
+  produto_id     Int
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([carrinho_id, produto_id])
 }
