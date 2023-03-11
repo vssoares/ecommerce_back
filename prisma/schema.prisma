@@ -34,16 +34,19 @@ model Endereco {
   cidade String
   uf String
   pais String
-  user   Usuario @relation(fields: [usuario_id], references: [id])
+  usuario   Usuario @relation(fields: [usuario_id], references: [id])
   usuario_id Int
+  carrinho Carrinho?
 }
 
 
 model Carrinho {
   id       Int  @id @default(autoincrement())
   produtos ProdutosOnCarrinho[]
-  user   Usuario @relation(fields: [usuario_id], references: [id])
+  usuario   Usuario @relation(fields: [usuario_id], references: [id])
   usuario_id Int @unique 
+  endereco   Endereco @relation(fields: [endereco_id], references: [id])
+  endereco_id Int @unique
 }
 
 model Produto {
@@ -58,6 +61,5 @@ model ProdutosOnCarrinho {
   produto_id     Int
   created_at DateTime @default(now())
   updated_at String
-
   @@id([carrinho_id, produto_id])
 }
