@@ -25,7 +25,7 @@ model Usuario {
 }
 
 model Endereco {
-  id       Int  @id @default(autoincrement())
+  id Int  @id @default(autoincrement())
   cep String
   rua String
   numero String
@@ -43,23 +43,48 @@ model Endereco {
 model Carrinho {
   id       Int  @id @default(autoincrement())
   produtos ProdutosOnCarrinho[]
+  valor_total Decimal
   usuario   Usuario @relation(fields: [usuario_id], references: [id])
   usuario_id Int @unique 
   endereco   Endereco @relation(fields: [endereco_id], references: [id])
   endereco_id Int @unique
 }
 
-model Produto {
-  id       Int  @id @default(autoincrement())
-  carrinhos ProdutosOnCarrinho[]
-}
 
 model ProdutosOnCarrinho {
   carrinho   Carrinho @relation(fields: [carrinho_id], references: [id])
   carrinho_id Int 
   produto       Produto     @relation(fields: [produto_id], references: [id])
   produto_id     Int
+  quantidade Int
   created_at DateTime @default(now())
   updated_at String
   @@id([carrinho_id, produto_id])
+}
+
+model Produto {
+  id       Int  @id @default(autoincrement())
+  nome String
+  preco Decimal
+  descricao String
+  imagem String
+  categorias CategoriasOnProdutos[]
+  carrinhos ProdutosOnCarrinho[]
+}
+
+
+model CategoriasOnProdutos {
+  categoria   Categoria @relation(fields: [categoria_id], references: [id])
+  categoria_id Int 
+  produto       Produto     @relation(fields: [produto_id], references: [id])
+  produto_id     Int
+  created_at DateTime @default(now())
+  updated_at String
+  @@id([categoria_id, produto_id])
+}
+
+model Categoria {
+  id       Int  @id @default(autoincrement())
+  nome String
+  produtos CategoriasOnProdutos[]
 }
