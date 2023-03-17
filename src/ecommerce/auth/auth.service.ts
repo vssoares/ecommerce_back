@@ -16,13 +16,13 @@ export class AuthService {
   async create(createUser: CreateUser) {
     const { name, email, password } = createUser
     
-    const userExists = await this.db.user.findUnique({
+    const userExists = await this.db.usuario.findUnique({
       where: { email: email }
     });
     if (userExists) throw new BadRequestError('Usuário já existe')
 
     const hashPassword = await bcrypt.hash(password, 10)
-    const user = this.db.user.create({
+    const user = this.db.usuario.create({
       data: {
         name,
         email,
@@ -39,7 +39,7 @@ export class AuthService {
   async login(login: UserLogin){
     const { email, password  } = login
     
-    const userGet = await this.db.user.findUnique({
+    const userGet = await this.db.usuario.findUnique({
       where: { email }
     });
     if (!userGet) throw new NotFoundError("Email não encontrado!")

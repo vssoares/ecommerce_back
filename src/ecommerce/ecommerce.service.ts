@@ -10,5 +10,26 @@ export class EcommerceService {
   async getCarrinho(){
   
   }
+  async getProdutos(){
+    let produtos
+    produtos = await this.db.produto.findMany({
+      include: {
+        categorias: {
+          include: {
+            categoria: true
+          }
+        }
+      }
+    })
+    produtos = produtos.map((produto) => {
+      produto.categorias = produto?.categorias.map((categoria) => {
+        return categoria.categoria
+      });
+      return produto
+    });
+
+    return produtos
+  }
+  
 
 }

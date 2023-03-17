@@ -57,8 +57,8 @@ model ProdutosOnCarrinho {
   produto       Produto     @relation(fields: [produto_id], references: [id])
   produto_id     Int
   quantidade Int
-  created_at DateTime @default(now())
-  updated_at String
+  created_at DateTime? @default(now())
+  updated_at String?
   @@id([carrinho_id, produto_id])
 }
 
@@ -78,8 +78,8 @@ model CategoriasOnProdutos {
   categoria_id Int 
   produto       Produto     @relation(fields: [produto_id], references: [id])
   produto_id     Int
-  created_at DateTime @default(now())
-  updated_at String
+  created_at DateTime? @default(now())
+  updated_at String?
   @@id([categoria_id, produto_id])
 }
 

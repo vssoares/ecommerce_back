@@ -9,6 +9,12 @@ export class EcommerceController {
       private ecommerceService: EcommerceService
    ){}
 
+   @Get('produtos')
+   async getProdutos(@Body() body?: any) {
+      const produtos = await this.ecommerceService.getProdutos()
+      return produtos
+   }
+
    @Get('carrinho')
    async getCarrinho(@Body() body?: any) {
       const carrinho = await this.ecommerceService.getCarrinho()
