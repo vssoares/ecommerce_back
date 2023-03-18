@@ -13,26 +13,40 @@ export class AuthService {
 
 
   // criar usuario
-  async create(createUser: CreateUser) {
-    const { name, email, password } = createUser
+  async create(createUser) {
+    const { 
+      name, email, password, celular, cpf, sexo,
+      
+    } = createUser
     
-    const userExists = await this.db.usuario.findUnique({
-      where: { email: email }
-    });
+    const userExists = await this.db.usuario.findFirst({
+      where: {
+        OR: [
+          { email },
+          { cpf },
+        ],
+      }
+    })
     if (userExists) throw new BadRequestError('Usuário já existe')
 
     const hashPassword = await bcrypt.hash(password, 10)
-    const user = this.db.usuario.create({
+    const usuario = this.db.usuario.create({
       data: {
-        name,
-        email,
+        name, email, celular, cpf, sexo,
         password: hashPassword
       },
     })
+    if (!usuario) throw new BadRequestError('Erro ao cadastrar usuário')
+  
+    const endereco = this.db.endereco.create({
+      data: {
+       
+      },
+    })
 
-    if (!user) throw new BadRequestError('Erro ao cadastrar usuário')
 
-    return user
+
+    return usuario
   }
 
   // login usuario

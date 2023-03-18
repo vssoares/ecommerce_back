@@ -8,7 +8,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('user')
-  async create(@Body() createUser: CreateUser) {
+  async create(@Body() createUser) {
     return await this.authService.create(createUser);
   }
 

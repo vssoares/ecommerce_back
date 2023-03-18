@@ -19,6 +19,9 @@ model Usuario {
   id    Int     @default(autoincrement()) @id
   name  String
   email String  @unique 
+  cpf String  @unique 
+  sexo String  
+  celular String  
   password String  
   enderecos Endereco[]
   carrinho Carrinho?
@@ -33,21 +36,17 @@ model Endereco {
   bairro String
   cidade String
   uf String
-  pais String
   usuario   Usuario @relation(fields: [usuario_id], references: [id])
   usuario_id Int
-  carrinho Carrinho?
 }
 
 
 model Carrinho {
   id       Int  @id @default(autoincrement())
   produtos ProdutosOnCarrinho[]
-  valor_total Decimal
+  valor_total Decimal?
   usuario   Usuario @relation(fields: [usuario_id], references: [id])
   usuario_id Int @unique 
-  endereco   Endereco @relation(fields: [endereco_id], references: [id])
-  endereco_id Int @unique
 }
 
 
