@@ -29,14 +29,14 @@ model Usuario {
 
 model Endereco {
   id Int  @id @default(autoincrement())
-  cep String
-  rua String
-  numero String
-  complemento String
-  bairro String
-  cidade String
-  uf String
-  usuario   Usuario @relation(fields: [usuario_id], references: [id])
+  cep String?
+  rua String?
+  numero String?
+  complemento String?
+  bairro String?
+  cidade String?
+  uf String?
+  usuario    Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
   usuario_id Int
 }
 
@@ -45,7 +45,7 @@ model Carrinho {
   id       Int  @id @default(autoincrement())
   produtos ProdutosOnCarrinho[]
   valor_total Decimal?
-  usuario   Usuario @relation(fields: [usuario_id], references: [id])
+  usuario   Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
   usuario_id Int @unique 
 }
 

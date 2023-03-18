@@ -14,11 +14,12 @@ export class AuthService {
 
   // criar usuario
   async create(createUser) {
-    const { 
-      name, email, password, celular, cpf, sexo,
-      
-    } = createUser
-    
+    const { name, email, password, celular, cpf, sexo } = createUser;
+    const userSchema = { name, email, celular, cpf, sexo };
+
+    const { cep, rua, numero, complemento, bairro, cidade, uf } = createUser;
+    const enderecoSchema = { cep, rua, numero, complemento, bairro, cidade, uf };
+
     const userExists = await this.db.usuario.findFirst({
       where: {
         OR: [
@@ -32,19 +33,22 @@ export class AuthService {
     const hashPassword = await bcrypt.hash(password, 10)
     const usuario = this.db.usuario.create({
       data: {
-        name, email, celular, cpf, sexo,
-        password: hashPassword
+        ...userSchema,
+        password: hashPassword,
+        enderecos: {
+          create: enderecoSchema,
+        },
+        carrinho: {
+          create: {}
+        }
+      },
+      include: {
+        enderecos: true,
+        carrinho: true
       },
     })
+
     if (!usuario) throw new BadRequestError('Erro ao cadastrar usuário')
-  
-    const endereco = this.db.endereco.create({
-      data: {
-       
-      },
-    })
-
-
 
     return usuario
   }
@@ -66,5 +70,15 @@ export class AuthService {
       expiresIn: '8h',
     })
     return { user, token };
+  }
+
+
+  async delete(id: number){
+    // console.log(id);
+    // return id
+    const usuarioDeletado = await this.db.usuario.delete({
+      where: { id },
+    })
+    return usuarioDeletado
   }
 }

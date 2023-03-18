@@ -12,6 +12,11 @@ export class AuthController {
     return await this.authService.create(createUser);
   }
 
+  @Delete('user')
+  delete(@Body() user: any) {
+    return this.authService.delete(user?.usuario_id);
+  }
+
   @Post('user/login')
   login(@Body() user: UserLogin) {
     return this.authService.login(user);
