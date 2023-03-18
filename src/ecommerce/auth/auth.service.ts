@@ -74,11 +74,13 @@ export class AuthService {
 
 
   async delete(id: number){
-    // console.log(id);
-    // return id
-    const usuarioDeletado = await this.db.usuario.delete({
-      where: { id },
-    })
-    return usuarioDeletado
+    try {
+      const usuarioDeletado = await this.db.usuario.delete({
+        where: { id },
+      })
+      return usuarioDeletado
+    } catch (error) {
+      throw new UnauthorizedError('Senha inválida!')
+    }
   }
 }
