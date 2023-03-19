@@ -27,6 +27,11 @@ export class EcommerceController {
       return carrinho
    }
 
+   @Post('carrinho/produto')
+   async addProdutoCarrinho(@Body() body: any) {
+      const carrinho = await this.ecommerceService.addProdutosCarrinho(body)
+      return carrinho
+   }   
    
 
 }

@@ -5,12 +5,12 @@ import { BadRequestError, NotFoundError } from 'src/shared/helpers/api-erros';
 
 @Injectable()
 export class EcommerceService {
-  constructor(private db: PrismaService) {}
+  constructor(private db: PrismaService) { }
 
-  async getCarrinho(){
-  
+  async getCarrinho() {
+
   }
-  async getProdutos(){
+  async getProdutos() {
     let produtos
     produtos = await this.db.produto.findMany({
       include: {
@@ -30,8 +30,8 @@ export class EcommerceService {
 
     return produtos
   }
-  
-  async getProduto(id: number){
+
+  async getProduto(id: number) {
     let produto
     produto = await this.db.produto.findUnique({
       where: {
@@ -50,4 +50,37 @@ export class EcommerceService {
     });
     return produto
   }
+
+  async addProdutosCarrinho(body: any) {
+    const { produtoId, quantidade } = body
+    const produto = await this.db.produto.findUnique({
+      where: {
+        id: produtoId
+      }
+    })
+    if (!produto) {
+      throw new NotFoundError('Produto não encontrado')
+    }
+
+    await this.db.carrinho.update({
+      where: {
+        id: body.carrinho_id
+      },
+      data: {
+        produtos: {
+          update: {
+            where: {
+              id: item.id
+            },
+            data: {
+              quantidade: item.quantidade + quantidade
+            }
+          }
+        }
+      }
+    })
+
+    return await this.getCarrinho()
+  }
+
 }
