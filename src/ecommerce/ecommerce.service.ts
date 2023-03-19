@@ -31,5 +31,23 @@ export class EcommerceService {
     return produtos
   }
   
-
+  async getProduto(id: number){
+    let produto
+    produto = await this.db.produto.findUnique({
+      where: {
+        id: id
+      },
+      include: {
+        categorias: {
+          include: {
+            categoria: true
+          }
+        }
+      }
+    })
+    produto.categorias = produto?.categorias.map((categoria) => {
+      return categoria.categoria
+    });
+    return produto
+  }
 }

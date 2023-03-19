@@ -15,10 +15,18 @@ export class EcommerceController {
       return produtos
    }
 
+   @Get('produtos/:id')
+   async getProduto(@Param('id') id: string) {
+      const produto = await this.ecommerceService.getProduto(+id)
+      return produto
+   }
+
    @Get('carrinho')
    async getCarrinho(@Body() body?: any) {
       const carrinho = await this.ecommerceService.getCarrinho()
       return carrinho
    }
+
+   
 
 }
