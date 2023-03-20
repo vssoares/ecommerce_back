@@ -17,13 +17,13 @@ export class EcommerceController {
 
    @Get('produto')
    async getProduto(@Body() body?: any) {
-      const produto = await this.ecommerceService.getProduto(+body?.produto_id)
+      const produto = await this.ecommerceService.getProduto(body?.produto_id)
       return produto
    }
 
    @Get('carrinho')
    async getCarrinho(@Body() body?: any) {
-      // const carrinho = await this.ecommerceService.getCarrinho()
+      const carrinho = await this.ecommerceService.getCarrinho(body?.carrinho_id)
       return 1
    }
 

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Carrinho } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 import { NotFoundError } from 'src/shared/helpers/api-erros';
 import { calcularValorTotalCarrinho, limparRelacao } from 'src/shared/utils/utils';
@@ -20,8 +21,9 @@ export class EcommerceService {
         }
       }
     })
+
     if (!carrinho) throw new NotFoundError('Carrinho não encontrado')
-    carrinho = limparRelacao(carrinho, 'produtos', 'produto')
+    // carrinho = limparRelacao(carrinho, 'produtos', 'produto')
     return carrinho
   }
 
@@ -60,14 +62,8 @@ export class EcommerceService {
 
   async addProdutoCarrinho({ quantidade, produto_id, carrinho_id }) {
     // Valida se o produto e o carrinho existem
-    const produto = await this.getProduto(+produto_id)
-    const carrinho = await this.getCarrinho(+carrinho_id)
-
-    var valorTotalCarrinho = calcularValorTotalCarrinho(carrinho)
-
-    
     // Adiciona o produto ao carrinho se não existir, ou atualiza a quantidade se já existir
-    await this.db.produtosOnCarrinho.upsert({
+    let a = await this.db.produtosOnCarrinho.upsert({
       where: {
         carrinho_id_produto_id: {
           produto_id: +produto_id,
@@ -83,9 +79,28 @@ export class EcommerceService {
         quantidade: +quantidade,
       },
     });
-
-    return await this.getCarrinho(carrinho_id)
+    const carrinhoUpdated = this.updateCarrinhoValor(carrinho_id)
+    return carrinhoUpdated 
   }
 
-  
+  async updateCarrinhoValor(id){
+    let carrinho = await this.getCarrinho(id)
+    let valorTotalCarrinho = calcularValorTotalCarrinho(carrinho)
+    carrinho = await this.db.carrinho.update({
+      where: {
+        id: +id
+      },
+      data: {
+        valor_total: valorTotalCarrinho
+      },
+      include: {
+        produtos: {
+          include: {
+            produto: true
+          }
+        }
+      }
+    })
+    return carrinho
+  }
 }

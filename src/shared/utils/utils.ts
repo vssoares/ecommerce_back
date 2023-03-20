@@ -17,7 +17,7 @@ export const limparRelacao = (lista, flagLista, flagListaFilha) => {
 export const calcularValorTotalCarrinho = (carrinho) => {
    let valorTotal = 0
    carrinho.produtos.forEach((produto) => {
-     valorTotal += produto.preco * produto.quantidade
+     valorTotal += produto.produto.preco * produto.quantidade
    })
    return valorTotal
  }

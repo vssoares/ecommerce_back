@@ -44,7 +44,7 @@ model Endereco {
 model Carrinho {
   id       Int  @id @default(autoincrement())
   produtos ProdutosOnCarrinho[]
-  valor_total Decimal?
+  valor_total Float?
   usuario   Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
   usuario_id Int @unique 
 }
@@ -64,7 +64,7 @@ model ProdutosOnCarrinho {
 model Produto {
   id       Int  @id @default(autoincrement())
   nome String
-  preco Decimal
+  preco Float
   descricao String
   imagem String
   categorias CategoriasOnProdutos[]
