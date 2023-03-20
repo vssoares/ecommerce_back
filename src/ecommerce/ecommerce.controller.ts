@@ -21,17 +21,4 @@ export class EcommerceController {
       return produto
    }
 
-   @Get('carrinho')
-   async getCarrinho(@Body() body?: any) {
-      const carrinho = await this.ecommerceService.getCarrinho(body?.carrinho_id)
-      return 1
-   }
-
-   @Post('carrinho/produto')
-   async addProdutoCarrinho(@Body() body: any) {
-      const carrinho = await this.ecommerceService.addProdutoCarrinho(body)
-      return carrinho
-   }   
-   
-
 }
