@@ -40,21 +40,20 @@ model Endereco {
   usuario_id Int
 }
 
-
 model Carrinho {
   id       Int  @id @default(autoincrement())
-  produtos ProdutosOnCarrinho[]
+  itens CarrinhoItem[]
   valor_total Float?
   usuario   Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
   usuario_id Int @unique 
 }
 
-
-model ProdutosOnCarrinho {
+model CarrinhoItem {
   carrinho   Carrinho @relation(fields: [carrinho_id], references: [id])
   carrinho_id Int 
   produto       Produto     @relation(fields: [produto_id], references: [id])
   produto_id     Int
+  preco_unitario Float
   quantidade Int
   created_at DateTime? @default(now())
   updated_at String?
@@ -68,7 +67,7 @@ model Produto {
   descricao String
   imagem String
   categorias CategoriasOnProdutos[]
-  carrinhos ProdutosOnCarrinho[]
+  itens CarrinhoItem[]
 }
 
 
