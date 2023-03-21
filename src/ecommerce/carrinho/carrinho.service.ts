@@ -53,8 +53,7 @@ export class CarrinhoService {
         quantidade: +quantidade,
       },
     });
-    const carrinhoUpdated = this.updateCarrinhoValor(carrinho_id)
-    return carrinhoUpdated
+    return await this.updateCarrinhoValor(carrinho_id)
   }
 
   async updateCarrinhoValor(id) {
@@ -77,4 +76,58 @@ export class CarrinhoService {
     })
     return carrinho
   }
+
+  async removerProdutoCarrinho({ produto_id, carrinho_id }) {
+    // Valida se o produto e o carrinho existem
+    // Remove o produto do carrinho
+    await this.validarProdutoCarrinho(produto_id, carrinho_id)  
+   
+    const carrinho = await this.getCarrinho(carrinho_id)
+    const quantidadeAtual = carrinho.itens.find(item => item.produto_id === +produto_id).quantidade
+    if (quantidadeAtual === 1) {
+      return await this.removerProdutoCarrinhoTudo({ produto_id, carrinho_id })
+    }
+    let produtoDeletado = await this.db.carrinhoItem.update({
+      where: {
+        carrinho_id_produto_id: {
+          produto_id: +produto_id,
+          carrinho_id: +carrinho_id
+        }
+      },
+      data: {
+        quantidade: {
+          decrement: 1
+        }
+      }
+    });
+    return  await this.updateCarrinhoValor(carrinho_id)
+  }
+
+
+  async removerProdutoCarrinhoTudo({ produto_id, carrinho_id }) {
+    // Valida se o produto e o carrinho existem
+    // Remove o produto do carrinho
+    await this.validarProdutoCarrinho(produto_id, carrinho_id)  
+    let produtoDeletado = await this.db.carrinhoItem.delete({
+      where: {
+        carrinho_id_produto_id: {
+          produto_id: +produto_id,
+          carrinho_id: +carrinho_id
+        }
+      }
+    });
+
+    return await this.updateCarrinhoValor(carrinho_id)
+  }
+
+  async validarProdutoCarrinho(produto_id, carrinho_id) {
+    const produto = await this.produtoService.getProduto(produto_id)
+    const carrinho = await this.getCarrinho(carrinho_id)
+    const carrinhoItem = carrinho.itens.find(produto => produto.produto_id === +produto_id)
+    if (!carrinhoItem) {
+      throw new NotFoundError('Produto não encontrado no carrinho')
+    }
+    return produto
+  }
+
 }
