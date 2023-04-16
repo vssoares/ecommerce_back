@@ -23,6 +23,7 @@ model Usuario {
   sexo String  
   celular String  
   password String  
+  data_nascimento DateTime
   enderecos Endereco[]
   carrinho Carrinho?
 }

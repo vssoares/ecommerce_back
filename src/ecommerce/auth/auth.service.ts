@@ -14,8 +14,10 @@ export class AuthService {
 
   // criar usuario
   async create(createUser) {
-    const { name, email, password, celular, cpf, sexo } = createUser;
-    const userSchema = { name, email, celular, cpf, sexo };
+    console.log(createUser);
+    
+    const { name, email, password, celular, cpf, sexo, data_nascimento } = createUser;
+    const userSchema = { name, email, celular, cpf, sexo, data_nascimento };
 
     const { cep, rua, numero, complemento, bairro, cidade, uf } = createUser;
     const enderecoSchema = { cep, rua, numero, complemento, bairro, cidade, uf };
