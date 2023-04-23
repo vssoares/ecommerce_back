@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserLogin } from './dto/user-login.dto';
 
@@ -20,5 +28,4 @@ export class AuthController {
   login(@Body() user: UserLogin) {
     return this.authService.login(user);
   }
-
 }
