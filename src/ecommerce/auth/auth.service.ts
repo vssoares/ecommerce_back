@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUser } from './dto/create-auth.dto';
 import { UserLogin } from './dto/user-login.dto';
 import { PrismaService } from 'src/prisma.service';
 import {
@@ -10,10 +9,12 @@ import {
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
+const ACCESS_TOKEN_SECRET = 'u721sxt7bchr5upabq00';
+
+
 @Injectable()
 export class AuthService {
   constructor(private db: PrismaService) {}
-
   // criar usuario
   async create(createUser) {
     console.log(createUser);
@@ -76,7 +77,7 @@ export class AuthService {
     if (!verifyPass) throw new UnauthorizedError('Senha inválida!');
 
     const { password: _, ...user }: any = userGet;
-    const token = jwt.sign({ user }, 'u721sxt7bchr5upabq00', {
+    const token = jwt.sign({ user }, ACCESS_TOKEN_SECRET, {
       expiresIn: '8h',
     });
     return { user, token };
