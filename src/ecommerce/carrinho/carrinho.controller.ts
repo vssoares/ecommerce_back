@@ -1,18 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Query } from '@nestjs/common';
 import { CarrinhoService } from './carrinho.service';
+import { AddProdutoCarrinho, GetCarrinho } from './swagger/classes';
 
 @Controller('ecommerce')
 export class CarrinhoController {
   constructor(private readonly carrinhoService: CarrinhoService) { }
 
   @Get('carrinho')
-  async getCarrinho(@Query() body?: any) {
-    const carrinho = await this.carrinhoService.getCarrinhoUser(body?.usuario_id)
+  async getCarrinho(@Query() body?: GetCarrinho) {
+    const carrinho = await this.carrinhoService.getCarrinho(body)
     return carrinho
   }
 
-  @Post('carrinho/produto')
-  async addProdutoCarrinho(@Body() body: any) {
+  @Patch('carrinho/produto')
+  async addProdutoCarrinho(@Body() body: AddProdutoCarrinho) {
     const carrinho = await this.carrinhoService.addProdutoCarrinho(body)
     return carrinho
   }

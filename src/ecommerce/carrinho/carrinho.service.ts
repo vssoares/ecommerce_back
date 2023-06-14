@@ -13,11 +13,18 @@ export class CarrinhoService {
   ) { }
 
 
-  async getCarrinho(id) {
+  async getCarrinho({ usuario_id, id }: any) {
+    usuario_id = +usuario_id
+    id = +id
+
+    const where = id ? { id } : usuario_id ? { usuario_id } : false;
+
+    if (!where) 
+      throw new NotFoundError('Carrinho não encontrado')
+    
+
     let carrinho = await this.db.carrinho.findUnique({
-      where: {
-        id: +id
-      },
+      where,
       include: {
         itens: {
           include: {
@@ -73,7 +80,7 @@ export class CarrinhoService {
   }
 
   async updateCarrinhoValor(id) {
-    let carrinho = await this.getCarrinho(id)
+    let carrinho = await this.getCarrinho({ id })
     let valorTotalCarrinho = calcularValorTotalCarrinho(carrinho)
     carrinho = await this.db.carrinho.update({
       where: {
@@ -98,7 +105,7 @@ export class CarrinhoService {
     // Remove o produto do carrinho
     await this.validarProdutoCarrinho(produto_id, carrinho_id)  
    
-    const carrinho = await this.getCarrinho(carrinho_id)
+    const carrinho = await this.getCarrinho({ id: carrinho_id})
     const quantidadeAtual = carrinho.itens.find(item => item.produto_id === +produto_id).quantidade
     if (quantidadeAtual === 1) {
       return await this.removerProdutoCarrinhoTudo({ produto_id, carrinho_id })
@@ -138,7 +145,7 @@ export class CarrinhoService {
 
   async validarProdutoCarrinho(produto_id, carrinho_id) {
     const produto = await this.produtoService.getProduto(produto_id)
-    const carrinho = await this.getCarrinho(carrinho_id)
+    const carrinho = await this.getCarrinho({ id: carrinho_id})
     const carrinhoItem = carrinho.itens.find(produto => produto.produto_id === +produto_id)
     if (!carrinhoItem) {
       throw new NotFoundError('Produto não encontrado no carrinho')
