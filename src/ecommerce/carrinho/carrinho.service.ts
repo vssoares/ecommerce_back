@@ -32,6 +32,22 @@ export class CarrinhoService {
     return carrinho
   }
 
+  async getCarrinhoUser(id) {
+    let carrinho = await this.db.carrinho.findUnique({
+      where: {
+        usuario_id: +id
+      },
+      include: {
+        itens: {
+          include: {
+            produto: true
+          }
+        }
+      }
+    })
+    return carrinho
+  }
+
   async addProdutoCarrinho({ quantidade, produto_id, carrinho_id }) {
     // Valida se o produto e o carrinho existem
     // Adiciona o produto ao carrinho se não existir, ou atualiza a quantidade se já existir
