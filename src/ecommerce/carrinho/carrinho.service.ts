@@ -22,7 +22,6 @@ export class CarrinhoService {
     if (!where)
       throw new NotFoundError('Carrinho não encontrado')
 
-
     let carrinho = await this.db.carrinho.findUnique({
       where,
       include: {
@@ -55,30 +54,6 @@ export class CarrinhoService {
     return carrinho
   }
 
-  async addProdutoCarrinho({ quantidade, produto_id, carrinho_id }) {
-    // Valida se o produto e o carrinho existem
-    // Adiciona o produto ao carrinho se não existir, ou atualiza a quantidade se já existir
-    const produto = await this.produtoService.getProduto(produto_id)
-    let a = await this.db.carrinhoItem.upsert({
-      where: {
-        carrinho_id_produto_id: {
-          produto_id: +produto_id,
-          carrinho_id: +carrinho_id
-        }
-      },
-      create: {
-        produto_id: +produto_id,
-        carrinho_id: +carrinho_id,
-        quantidade: +quantidade,
-        preco_unitario: produto.preco
-      },
-      update: {
-        quantidade: +quantidade,
-      },
-    });
-    return await this.updateCarrinhoValor(carrinho_id)
-  }
-
   async updateCarrinhoValor(id) {
     let carrinho = await this.getCarrinho({ id })
     let valorTotalCarrinho = calcularValorTotalCarrinho(carrinho)
@@ -100,6 +75,31 @@ export class CarrinhoService {
     return carrinho
   }
 
+  async addProdutoCarrinho({ quantidade, produto_id, carrinho_id }) {
+    quantidade = +quantidade;
+    produto_id = +produto_id;
+    carrinho_id = +carrinho_id;
+
+    // Adiciona o produto ao carrinho se não existir, ou atualiza a quantidade somando com a nova
+    const produto = await this.produtoService.getProduto(produto_id);
+    await this.db.carrinhoItem.upsert({
+      where: {
+        carrinho_id_produto_id: { produto_id, carrinho_id }
+      },
+      create: {
+        produto_id,
+        carrinho_id,
+        quantidade,
+        preco_unitario: produto.preco
+      },
+      update: {
+        quantidade: { increment: quantidade },
+      },
+    });
+    return await this.updateCarrinhoValor(carrinho_id);
+  }
+  
+ 
   async removerProdutoCarrinho({ produto_id, carrinho_id }) {
     // Valida se o produto e o carrinho existem
     // Remove o produto do carrinho
