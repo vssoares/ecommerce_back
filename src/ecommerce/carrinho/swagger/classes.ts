@@ -9,23 +9,22 @@ export class GetCarrinho {
 }
 
 export class AddProdutoCarrinho {
-    @ApiProperty({ name: 'carrinho_id', required: false })
+    @ApiProperty({ name: 'carrinho_id', required: true })
     carrinho_id: number;
 
-    @ApiProperty({ name: 'produto_id', required: false })
+    @ApiProperty({ name: 'produto_id', required: true })
     produto_id: number;
 
-    @ApiProperty({ name: 'quantidade', required: false })
+    @ApiProperty({ name: 'quantidade', required: true })
     quantidade: number;
 
 }
 
 
 export class ProdutoCarrinho {
-    @ApiProperty({ name: 'carrinho_id', required: false })
+    @ApiProperty({ name: 'carrinho_id', required: true })
     carrinho_id: number;
 
     @ApiProperty({ name: 'produto_id', required: false })
     produto_id: number;
-
 }

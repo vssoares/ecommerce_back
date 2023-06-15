@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Patch, Query } from '@nestjs/common';
 import { CarrinhoService } from './carrinho.service';
 import { AddProdutoCarrinho, GetCarrinho, ProdutoCarrinho } from './swagger/classes';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Controller('ecommerce')
 export class CarrinhoController {
@@ -27,6 +28,13 @@ export class CarrinhoController {
   @Delete('carrinho/produto/remover/tudo')
   async removerProdutoCarrinhoTudo(@Body() body: any) {
     const carrinho = await this.carrinhoService.removerProdutoCarrinhoTudo(body)
+    return carrinho
+  }
+
+  @Patch('carrinho/limpar')
+  @ApiProperty({ name: 'carrinho_id', required: true })
+  async limparCarrinho(@Body() body: any) {
+    const carrinho = await this.carrinhoService.limparProdutosCarrinho(body)
     return carrinho
   }
 

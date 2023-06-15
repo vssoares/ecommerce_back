@@ -38,22 +38,6 @@ export class CarrinhoService {
     return carrinho
   }
 
-  async getCarrinhoUser(id) {
-    let carrinho = await this.db.carrinho.findUnique({
-      where: {
-        usuario_id: +id
-      },
-      include: {
-        itens: {
-          include: {
-            produto: true
-          }
-        }
-      }
-    })
-    return carrinho
-  }
-
   async updateCarrinhoValor(id) {
     let carrinho = await this.getCarrinho({ id })
     let valorTotalCarrinho = calcularValorTotalCarrinho(carrinho)
@@ -131,7 +115,7 @@ export class CarrinhoService {
     // Valida se o produto e o carrinho existem
     // Remove o produto do carrinho
     await this.validarProdutoCarrinho(produto_id, carrinho_id)
-    let produtoDeletado = await this.db.carrinhoItem.delete({
+    await this.db.carrinhoItem.delete({
       where: {
         carrinho_id_produto_id: {
           produto_id: +produto_id,
@@ -141,6 +125,15 @@ export class CarrinhoService {
     });
 
     return await this.updateCarrinhoValor(carrinho_id)
+  }
+
+  async limparProdutosCarrinho({ carrinho_id }) {
+    await this.db.carrinhoItem.deleteMany({
+      where: {
+        carrinho_id: +carrinho_id
+      }
+    });
+    return await this.updateCarrinhoValor(carrinho_id);
   }
 
   async validarProdutoCarrinho(produto_id, carrinho_id) {
