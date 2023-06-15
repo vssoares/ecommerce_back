@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Patch, Query } from '@nestjs/common';
 import { CarrinhoService } from './carrinho.service';
-import { AddProdutoCarrinho, GetCarrinho } from './swagger/classes';
+import { AddProdutoCarrinho, GetCarrinho, ProdutoCarrinho } from './swagger/classes';
 
 @Controller('ecommerce')
 export class CarrinhoController {
@@ -18,8 +18,8 @@ export class CarrinhoController {
     return carrinho
   }
 
-  @Delete('carrinho/produto/remover')
-  async removerProdutoCarrinho(@Body() body: any) {
+  @Patch('carrinho/produto/remover')
+  async removerProdutoCarrinho(@Body() body: ProdutoCarrinho) {
     const carrinho = await this.carrinhoService.removerProdutoCarrinho(body)
     return carrinho
   }

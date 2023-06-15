@@ -19,3 +19,13 @@ export class AddProdutoCarrinho {
     quantidade: number;
 
 }
+
+
+export class ProdutoCarrinho {
+    @ApiProperty({ name: 'carrinho_id', required: false })
+    carrinho_id: number;
+
+    @ApiProperty({ name: 'produto_id', required: false })
+    produto_id: number;
+
+}
