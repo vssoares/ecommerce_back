@@ -83,9 +83,7 @@ export class CarrinhoService {
   async removerProdutoCarrinho({ produto_id, carrinho_id }) {
     // Valida se o produto e o carrinho existem
     // Remove o produto do carrinho
-    await this.validarProdutoCarrinho(produto_id, carrinho_id);
-
-    const carrinho = await this.getCarrinho({ id: carrinho_id });
+    const carrinho = await this.validarProdutoCarrinho(produto_id, carrinho_id);
     const quantidadeAtual = carrinho.itens.find(
       (item) => item.produto_id === +produto_id,
     ).quantidade;
@@ -134,14 +132,14 @@ export class CarrinhoService {
   }
 
   async validarProdutoCarrinho(produto_id, carrinho_id) {
-    const produto = await this.produtoService.getProduto(produto_id);
+    await this.produtoService.getProduto(produto_id);
     const carrinho = await this.getCarrinho({ id: carrinho_id });
     const carrinhoItem = carrinho.itens.find(
       (produto) => produto.produto_id === +produto_id,
     );
     if (!carrinhoItem) {
-      throw new NotFoundError('Produto não encontrado no carrinho');
+      throw new NotFoundError('Produto não encontrado no carrinho!');
     }
-    return produto;
+    return carrinho;
   }
 }
