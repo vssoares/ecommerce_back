@@ -1,11 +1,7 @@
-import { Controller} from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { EcommerceService } from './ecommerce.service';
 
 @Controller('ecommerce')
 export class EcommerceController {
-
-   constructor(
-      private ecommerceService: EcommerceService
-   ){}
-
+  constructor(private ecommerceService: EcommerceService) {}
 }

@@ -11,7 +11,6 @@ import * as jwt from 'jsonwebtoken';
 
 const ACCESS_TOKEN_SECRET = 'u721sxt7bchr5upabq00';
 
-
 @Injectable()
 export class AuthService {
   constructor(private db: PrismaService) {}

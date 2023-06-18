@@ -7,16 +7,8 @@ import { CarrinhoModule } from './carrinho/carrinho.module';
 import { ProdutoModule } from './produto/produto.module';
 
 @Module({
-  imports: [
-    AuthModule, 
-    CarrinhoModule, ProdutoModule
-  ],
-  controllers: [
-    EcommerceController
-  ],
-  providers: [
-    EcommerceService, 
-    PrismaService
-  ]
+  imports: [AuthModule, CarrinhoModule, ProdutoModule],
+  controllers: [EcommerceController],
+  providers: [EcommerceService, PrismaService],
 })
 export class EcommerceModule {}

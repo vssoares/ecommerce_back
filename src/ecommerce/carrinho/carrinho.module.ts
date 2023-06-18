@@ -6,6 +6,6 @@ import { ProdutoService } from '../produto/produto.service';
 
 @Module({
   controllers: [CarrinhoController],
-  providers: [CarrinhoService, ProdutoService, PrismaService]
+  providers: [CarrinhoService, ProdutoService, PrismaService],
 })
 export class CarrinhoModule {}
