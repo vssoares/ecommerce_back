@@ -29,7 +29,7 @@ export class CarrinhoController {
     return carrinho;
   }
 
-  @Delete('carrinho/produto/remover/tudo')
+  @Patch('carrinho/produto/remover/tudo')
   async removerProdutoCarrinhoTudo(@Body() body: any) {
     const carrinho = await this.carrinhoService.removerProdutoCarrinhoTudo(
       body,

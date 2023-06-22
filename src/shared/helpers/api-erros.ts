@@ -1,28 +1,33 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-export class ApiError extends HttpException {
-  public readonly statusCode: number;
+const Default = 'Ocorreu um erro interno';
 
-  constructor(message: string, statusCode: HttpStatus) {
-    super({ status: false, message }, statusCode);
-    this.statusCode = statusCode;
+export class CustomError extends HttpException {
+  constructor(status: HttpStatus, message: string = Default) {
+    super({ status: false, message: message }, status);
   }
 }
 
-export class BadRequestError extends ApiError {
-  constructor(message: string) {
-    super(message, HttpStatus.BAD_REQUEST);
+export class BadRequestError extends CustomError {
+  constructor(message: string = Default) {
+    super(HttpStatus.BAD_REQUEST, message);
   }
 }
 
-export class NotFoundError extends ApiError {
-  constructor(message: string) {
-    super(message, HttpStatus.NOT_FOUND);
+export class NotFoundError extends CustomError {
+  constructor(message: string = Default) {
+    super(HttpStatus.NOT_FOUND, message);
   }
 }
 
-export class UnauthorizedError extends ApiError {
-  constructor(message: string) {
-    super(message, HttpStatus.UNAUTHORIZED);
+export class UnauthorizedError extends CustomError {
+  constructor(message: string = Default) {
+    super(HttpStatus.UNAUTHORIZED, message);
+  }
+}
+
+export class ForbiddenError extends CustomError {
+  constructor(message: string = Default) {
+    super(HttpStatus.FORBIDDEN, message);
   }
 }
