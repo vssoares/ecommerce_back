@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { NotFoundError } from 'src/shared/helpers/api-erros';
+import { BadRequestError, NotFoundError } from 'src/shared/helpers/api-erros';
 import { calcularValorTotalCarrinho } from 'src/shared/utils/utils';
 import { ProdutoService } from '../produto/produto.service';
 
@@ -16,19 +16,21 @@ export class CarrinhoService {
     id = +id;
 
     const where = id ? { id } : usuario_id ? { usuario_id } : false;
-
     if (!where) throw new NotFoundError('Carrinho não encontrado');
-
-    const carrinho = await this.db.carrinho.findUnique({
-      where,
-      include: {
-        itens: {
-          include: {
-            produto: true,
+    const carrinho = await this.db.carrinho
+      .findUnique({
+        where,
+        include: {
+          itens: {
+            include: {
+              produto: true,
+            },
           },
         },
-      },
-    });
+      })
+      .catch(() => {
+        throw new BadRequestError();
+      });
 
     if (!carrinho) throw new NotFoundError('Carrinho não encontrado');
     // carrinho = limparRelacao(carrinho, 'produtos', 'produto')
