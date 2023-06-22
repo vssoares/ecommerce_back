@@ -19,16 +19,21 @@ export class CarrinhoService {
 
     if (!where) throw new NotFoundError('Carrinho não encontrado');
 
-    const carrinho = await this.db.carrinho.findUnique({
-      where,
-      include: {
-        itens: {
-          include: {
-            produto: true,
+    const carrinho = await this.db.carrinho
+      .findUnique({
+        where,
+        include: {
+          itens: {
+            include: {
+              produto: true,
+            },
           },
         },
-      },
-    });
+      })
+      .catch((error) => {
+        // Trate o erro aqui
+        console.error(error);
+      });
 
     if (!carrinho) throw new NotFoundError('Carrinho não encontrado');
     // carrinho = limparRelacao(carrinho, 'produtos', 'produto')
