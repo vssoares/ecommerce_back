@@ -55,6 +55,7 @@ model CarrinhoItem {
   produto        Produto   @relation(fields: [produto_id], references: [id])
   produto_id     Int
   preco_unitario Float
+  preco_total    Float?
   quantidade     Int
   created_at     DateTime? @default(now())
   updated_at     String?
