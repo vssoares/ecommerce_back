@@ -62,7 +62,9 @@ export class CarrinhoService {
     quantidade = +quantidade;
     produto_id = +produto_id;
     carrinho_id = +carrinho_id;
-    let preco;
+    let preco_unitario = 0;
+    let preco_total = 0;
+
     // Adiciona o produto ao carrinho se não existir, ou atualiza a quantidade somando com a nova
     const carrinhoItem = await this.getProdutoCarrinho({
       produto_id,
@@ -71,11 +73,13 @@ export class CarrinhoService {
 
     if (!carrinhoItem) {
       const produto = await this.produtoService.getProduto(produto_id);
-      preco = produto.preco;
+      preco_unitario = produto.preco;
     } else {
-      preco = carrinhoItem?.preco_unitario;
+      preco_unitario = carrinhoItem?.preco_unitario;
       quantidade = carrinhoItem?.quantidade + quantidade;
     }
+
+    preco_total = preco_unitario * quantidade;
 
     await this.db.carrinhoItem.upsert({
       where: {
@@ -85,12 +89,12 @@ export class CarrinhoService {
         produto_id,
         carrinho_id,
         quantidade,
-        preco_unitario: preco,
-        preco_total: preco * quantidade,
+        preco_unitario,
+        preco_total,
       },
       update: {
         quantidade,
-        preco_total: preco * quantidade,
+        preco_total,
       },
     });
     return await this.updateCarrinhoValor(carrinho_id);
@@ -173,3 +177,10 @@ export class CarrinhoService {
     return carrinhoItem;
   }
 }
+
+// this.db.$use(async (params, next) => {
+//   if (params?.model && params.action == 'upsert') {
+//     // Logic only runs for delete action and Post model
+//   }
+//   return next(params);
+// });
