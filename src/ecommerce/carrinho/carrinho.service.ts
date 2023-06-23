@@ -103,8 +103,9 @@ export class CarrinhoService {
       produto_id,
       carrinho_id,
     );
-    const quantidadeAtual = carrinhoItem.quantidade;
-    if (quantidadeAtual === 1) {
+    const quantidade = carrinhoItem?.quantidade;
+    const preco = carrinhoItem?.preco_unitario;
+    if (quantidade === 1) {
       return await this.removerProdutoCarrinhoTudo({ produto_id, carrinho_id });
     }
     await this.db.carrinhoItem.update({
@@ -118,6 +119,7 @@ export class CarrinhoService {
         quantidade: {
           decrement: 1,
         },
+        preco_total: preco * (quantidade - 1),
       },
     });
     return await this.updateCarrinhoValor(carrinho_id);
