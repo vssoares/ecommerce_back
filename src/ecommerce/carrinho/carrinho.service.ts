@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { BadRequestError, NotFoundError } from 'src/shared/helpers/api-erros';
-import { calcularValorTotalCarrinho } from 'src/shared/utils/utils';
+import { calcularValorTotalCarrinho } from 'src/ecommerce/utils/utils';
 import { ProdutoService } from '../produto/produto.service';
 
 @Injectable()

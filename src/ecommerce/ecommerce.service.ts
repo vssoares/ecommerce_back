@@ -5,7 +5,7 @@ import { NotFoundError } from 'src/shared/helpers/api-erros';
 import {
   calcularValorTotalCarrinho,
   limparRelacao,
-} from 'src/shared/utils/utils';
+} from 'src/ecommerce/utils/utils';
 
 @Injectable()
 export class EcommerceService {
