@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/config/prisma.service';
 import { NotFoundError } from 'src/shared/helpers/api-erros';
 import { limparRelacao } from 'src/ecommerce/utils/utils';
 

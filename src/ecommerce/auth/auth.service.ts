@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { UserLogin } from './dto/user-login.dto';
-import { PrismaService } from 'src/prisma.service';
 import {
   BadRequestError,
   NotFoundError,
@@ -8,6 +7,7 @@ import {
 } from 'src/shared/helpers/api-erros';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { PrismaService } from 'src/config/prisma.service';
 
 const ACCESS_TOKEN_SECRET = 'u721sxt7bchr5upabq00';
 

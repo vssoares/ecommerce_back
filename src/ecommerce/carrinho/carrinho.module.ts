@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CarrinhoService } from './carrinho.service';
 import { CarrinhoController } from './carrinho.controller';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/config/prisma.service';
 import { ProdutoService } from '../produto/produto.service';
 
 @Module({

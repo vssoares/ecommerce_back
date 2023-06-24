@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Carrinho } from '@prisma/client';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/config/prisma.service';
 import { NotFoundError } from 'src/shared/helpers/api-erros';
 import {
   calcularValorTotalCarrinho,
