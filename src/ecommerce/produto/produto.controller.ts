@@ -1,20 +1,14 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Body } from '@nestjs/common';
 import { ProdutoService } from './produto.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Produto')
 @Controller('ecommerce')
 export class ProdutoController {
   constructor(private readonly produtoService: ProdutoService) {}
 
   @Get('produtos')
-  async getProdutos(@Body() body?: any) {
+  async getProdutos() {
     const produtos = await this.produtoService.getProdutos();
     return produtos;
   }

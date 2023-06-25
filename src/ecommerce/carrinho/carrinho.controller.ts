@@ -5,12 +5,12 @@ import {
   GetCarrinho,
   ProdutoCarrinho,
 } from './swagger/classes';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Carrinho')
 @Controller('ecommerce')
 export class CarrinhoController {
   constructor(private readonly carrinhoService: CarrinhoService) {}
-
   @Get('carrinho')
   async getCarrinho(@Query() body?: GetCarrinho) {
     const carrinho = await this.carrinhoService.getCarrinho(body);
