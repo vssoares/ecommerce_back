@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
-import { PrismaClientValidationError } from '@prisma/client/runtime';
 import { PrismaService } from 'src/config/prisma.service';
 import { BadRequestError, NotFoundError } from 'src/shared/helpers/api-erros';
 
