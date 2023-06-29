@@ -8,16 +8,16 @@ import {
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { PrismaService } from 'src/config/prisma.service';
+import { JwtService } from '@nestjs/jwt';
 
 const ACCESS_TOKEN_SECRET = 'u721sxt7bchr5upabq00';
 
 @Injectable()
 export class AuthService {
-  constructor(private db: PrismaService) {}
+  constructor(private db: PrismaService, private jwtService: JwtService) {}
+
   // criar usuario
   async create(createUser) {
-    console.log(createUser);
-
     const { name, email, password, celular, cpf, sexo, data_nascimento } =
       createUser;
     const userSchema = { name, email, celular, cpf, sexo, data_nascimento };
@@ -67,18 +67,23 @@ export class AuthService {
   async login(login: UserLogin) {
     const { email, password } = login;
 
-    const userGet = await this.db.usuario.findUnique({
+    console.log(login);
+
+    const userExists = await this.db.usuario.findUnique({
       where: { email },
     });
-    if (!userGet) throw new NotFoundError('Email não encontrado!');
+    if (!userExists) throw new NotFoundError('Email não encontrado!');
 
-    const verifyPass = await bcrypt.compare(password, userGet.password);
+    const verifyPass = await bcrypt.compare(password, userExists.password);
     if (!verifyPass) throw new UnauthorizedError('Senha inválida!');
 
-    const { password: _, ...user }: any = userGet;
-    const token = jwt.sign({ user }, ACCESS_TOKEN_SECRET, {
-      expiresIn: '8h',
-    });
+    const { password: _, ...user }: any = userExists;
+    const payload = { ...user };
+    const token = {
+      access_token: await this.jwtService.signAsync(payload, {
+        expiresIn: '1d',
+      }),
+    };
     return { user, token };
   }
 
