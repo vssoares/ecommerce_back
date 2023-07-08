@@ -27,9 +27,7 @@ export class AuthController {
   }
 
   @Post('user/login')
-  login(@Query() user: any) {
-    console.log(user);
-
+  login(@Body() user: any) {
     return this.authService.login(user);
   }
 }

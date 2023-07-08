@@ -6,11 +6,8 @@ import {
   UnauthorizedError,
 } from 'src/shared/helpers/api-erros';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
 import { PrismaService } from 'src/config/prisma.service';
 import { JwtService } from '@nestjs/jwt';
-
-const ACCESS_TOKEN_SECRET = 'u721sxt7bchr5upabq00';
 
 @Injectable()
 export class AuthService {
@@ -67,8 +64,6 @@ export class AuthService {
   async login(login: UserLogin) {
     const { email, password } = login;
 
-    console.log(login);
-
     const userExists = await this.db.usuario.findUnique({
       where: { email },
     });
@@ -79,11 +74,9 @@ export class AuthService {
 
     const { password: _, ...user }: any = userExists;
     const payload = { ...user };
-    const token = {
-      access_token: await this.jwtService.signAsync(payload, {
-        expiresIn: '1d',
-      }),
-    };
+    const token = await this.jwtService.signAsync(payload, {
+      expiresIn: '1d',
+    });
     return { user, token };
   }
 
